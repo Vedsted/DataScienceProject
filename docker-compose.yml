@@ -75,6 +75,9 @@ services:
       SERVICE_PRECONDITION: "namenode:9870 datanode1:9864 datanode2:9864 datanode3:9864"
     env_file:
       - ./hadoop.env
+    command: ./run-resourcemanager.sh # Override the original run.sh script
+    volumes:
+      - ./run-resourcemanager.sh:/run-resourcemanager.sh # Volume the script into the container in order to be able to call it
     networks:
       cscourse:
         ipv4_address: 172.25.0.6
