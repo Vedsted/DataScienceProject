@@ -1,2 +1,2 @@
 docker build . -t pysparkexampleimage:latest 
-docker run --rm --ip 172.25.0.240 --hostname pyspark --env-file hadoop.env --network hadoop pysparkexampleimage
+docker run --rm --ip 172.25.0.240 --hostname pyspark --network hadoop pysparkexampleimage

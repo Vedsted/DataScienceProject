@@ -1,9 +1,9 @@
-FROM bde2020/hadoop-base
+FROM openjdk:8
 
 LABEL Name=pysparkExampleImage Version=0.0.1 
 
 # Updating package manager
-RUN apt-get update
+RUN apt update
 
 # installing packages needed and pip packages
 RUN apt -y install python3 python3-pip locales
