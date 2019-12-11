@@ -1,7 +1,7 @@
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
 
-sparkContext = SparkContext(master='spark://spark-master:7077', appName='addFiles')
+sparkContext = SparkContext(appName='addFiles')
 sparkSession = SparkSession(sparkContext)
 
 # Create data
@@ -13,5 +13,3 @@ df.write.csv('hdfs://namenode:9000/csv/test.csv')
 
 df_load = sparkSession.read.csv('hdfs://namenode:9000/csv/test.csv')
 df_load.show()
-
-sparkSession.stop()
