@@ -39,4 +39,4 @@ ENV SPARK_APPLICATION_ARGS "foo bar baz"
 ```
 
 #### Example application
-The `app.py` contains a word-count example application which counts the number of words in text files on a hadoop hdfs cluster. The application requires that the hadoop environment is started first from the root-folder with `docker-compose up`. Furthermore, there should be put one or more text files in subfolders in the hdfs cluster i.e. the text-files should not be placed in `/` because this throws an IndexOutOfBounds exception.
+The `app.py` contains a word-count example application which counts the number of words in text files on a hadoop hdfs cluster. The application requires that the hadoop environment is started first with `docker-compose up`. Furthermore, there should be put one or more text files in subfolders in the hdfs cluster i.e. the text-files should not be placed in `/` because this throws an IndexOutOfBounds exception.
