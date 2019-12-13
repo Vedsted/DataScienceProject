@@ -82,7 +82,7 @@ services:
       cscourse:
         ipv4_address: 172.25.0.6
   nodemanager: #Node Orchestrator (for containers)
-    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.1.2-java8
+    image: csbc92/nodemanager
     container_name: nodemanager
     ports:
       - 8042:8042
