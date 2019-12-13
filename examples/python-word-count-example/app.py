@@ -3,7 +3,7 @@ import locale
 locale.getdefaultlocale()
 locale.getpreferredencoding()
 
-sc = SparkContext(master='spark://spark-master:7077', appName='myAppName') # Schedule the job to the spark cluster
+sc = SparkContext(appName='myAppName') # Schedule the job to the spark cluster
 
 files = "hdfs://namenode:9000/books" # Look in the folder books on the hdfs cluster
 txtFiles = sc.wholeTextFiles(files, 20)
