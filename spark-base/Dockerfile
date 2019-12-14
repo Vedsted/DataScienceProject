@@ -25,5 +25,8 @@ ADD spark-env.sh /spark/conf/spark-env.sh
 # Make sure that we can execute the script
 RUN chmod +x /spark/conf/spark-env.sh
 
+# Add the default spark-submit configurations that will be used for every submit, unless overridden
+ADD spark-defaults.conf /spark/conf/spark-defaults.conf
+
 
 ENTRYPOINT ["/bin/bash"]
