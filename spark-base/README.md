@@ -25,7 +25,7 @@ An example of extending the image is provided in steps here:
     ```bash
     mkdir my-extended-spark-image
     ```
-1. Create a new file named `Dockerfile` and use one of the boilerplates below.
+1. Create a new file named `Dockerfile` and use one of the boilerplates below. If you create Java programs you must add the jar-files to the image with the use of the `ADD` command in the `Dockerfile`.
 
     For Java programs:
     ```bash
@@ -33,6 +33,7 @@ An example of extending the image is provided in steps here:
 
     ADD submit-job.sh /app/submit-job.sh
     RUN chmod +x /app/submit-job.sh
+    ADD your-jar.jar /app/your-jar.jar
 
     CMD [ "/app/submit-job.sh"]
     ```
@@ -44,18 +45,14 @@ An example of extending the image is provided in steps here:
     ADD app.py /app/app.py
     ```
 
-    It is possible to override the configuration files by adding them with the `ADD` command in the `Dockerfile`. For example, if you want to use another `spark-defaults.conf` file do the following:
+    It is possible to override the configuration files by adding them with the `ADD` command in the `Dockerfile`. For example, if you want to use another `spark-defaults.conf` file, create it and do the following:
 
     ```bash
-    ADD submit-job.sh /app/submit-job.sh
-    RUN chmod +x /app/submit-job.sh
-    ADD app.py /app/app.py
-
     # Add your config file and override the default provided in the spark-base image
     ADD spark-defaults.conf /spark/conf/spark-defaults.conf
     ```
 
-2. Create the `submit-job.sh` file which should contain the command you want to use when deploying spark jobs to the YARN cluster. Use one of the boilerplates below. If you create Java programs you must add the jar-files to the image with the use of the `ADD` command in the `Dockerfile` and make sure that you point
+2. Create the `submit-job.sh` file which should contain the command you want to use when deploying spark jobs to the YARN cluster. Use one of the boilerplates below. If you create Java programs make sure that you point to the location of your jar-file.
 
     For Java programs:
     ```bash
