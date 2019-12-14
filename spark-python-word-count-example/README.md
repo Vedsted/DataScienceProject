@@ -2,7 +2,7 @@
 * Start the whole docker environment in the `../environment` directory by navigating to the directory and issuing `docker-compose up`.
 
 # Running the example
-If you already have text files in the directory `/books`, go to step 7.
+If you already have text files in the HDFS directory `/books`, go to step 7.
 You can put text files in the HDFS cluster by following these steps:
 1. Open a TTY connection to the HDFS namenode:
     ```bash
