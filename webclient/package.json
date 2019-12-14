@@ -1,0 +1,23 @@
+{
+    "name": "webclient",
+    "version": "1.0.0",
+    "description": "Web client for visualizing/interacting with crime data",
+    "main": "js/index.js",
+    "scripts": {
+        "start": "parcel index.html",
+        "build": "rm -fr dist && tsc --noEmit && parcel build --experimental-scope-hoisting --public-url . index.html",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "commonjs": "0.0.1",
+        "core-js": "^3.5.0",
+        "ol": "6.1.1"
+    },
+    "devDependencies": {
+        "typescript": "^3.7.3",
+        "parcel": "1.11.0",
+        "@types/ol": "^5.3.6"
+    }
+}
