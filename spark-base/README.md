@@ -81,7 +81,7 @@ An example of extending the image is provided in steps here:
     ```
     docker build --rm -t my-extended-spark-image .
     ```
-4. Run your extended Docker image
+4. Run your extended Docker image. NB! Requires that your Hadoop environment is running in docker. If it is not running already go and start it with `cd ../environment && docker-compose up`
     ```
     docker run --rm --name my-extended-spark-image --network hadoop --ip 172.25.0.241 my-extended-spark-image
     ```
