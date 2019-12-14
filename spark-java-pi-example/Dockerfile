@@ -1,6 +1,6 @@
 FROM csbc92/spark-base
 
-ADD execute-example.sh /app/execute-example.sh
-RUN chmod +x /app/execute-example.sh
+ADD submit-job.sh /app/submit-job.sh
+RUN chmod +x /app/submit-job.sh
 
-CMD [ "/app/execute-example.sh"]
+CMD [ "/app/submit-job.sh"]
