@@ -17,4 +17,7 @@ RUN rm -rf /var/cache/apk/*
 
 
 ADD conf /conf
-RUN /livy/bin/livy-server start 
+ADD spark-defaults.conf /spark/conf/spark-defaults.conf
+ADD init.sh /init.sh
+RUN chmod +x /init.sh
+CMD [ "init.sh" ]
