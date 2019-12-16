@@ -1,2 +1,3 @@
 #!/bin/bash
-${LIVY_HOME}/bin/livy-server start
+/livy/bin/livy-server start
+tail -f /dev/null

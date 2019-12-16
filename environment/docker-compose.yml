@@ -131,6 +131,14 @@ services:
     networks:
       cscourse:
         ipv4_address: 172.25.0.8
+  livy:
+    image: vedsted/livy
+    container_name: livy
+    ports: 
+      - 8998:8998
+    networks: 
+      cscourse:
+        ipv4_address: 172.25.0.9
 #  spark-master:
 #    image: bde2020/spark-master:2.4.4-hadoop2.7
 #    container_name: spark-master
