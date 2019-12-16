@@ -1,0 +1,13 @@
+version: "3.5"
+
+services:
+  sparkjob:
+    image: vedsted/spark_executor
+    container_name: spark-pi
+    volumes:
+      - ./app.py:/app/app.py
+
+networks:
+  default:
+    external:
+      name: hadoop

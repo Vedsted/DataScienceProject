@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  sparkjob:
+    image: vedsted/spark_executor
+    container_name: spark-push-csv
+    volumes:
+      - ./app.py:/app/app.py
+      - ./files.zip:/app/files.zip
+
+networks:
+  default:
+    external:
+      name: hadoop

@@ -8,8 +8,10 @@ The `docker-compose` file contains the whole Hadoop environment including:
   * Datanode3
 * Yarn cluster
   * Resourcemanager
-  * Nodemanager
-* History server for logging results from programs run on the YARN cluster
+  * Nodemanager1
+  * Nodemanager2
+  * Nodemanager3
+  * Historyserver for logging results from programs run on the YARN cluster
 * Network for communication
 * Volumes for containers
 
