@@ -144,6 +144,8 @@ services:
     networks: 
       cscourse:
         ipv4_address: 172.25.0.11
+    tty: true
+    stdin_open: true
 
 networks:
   cscourse:

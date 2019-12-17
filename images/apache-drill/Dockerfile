@@ -9,4 +9,4 @@ RUN rm /apache-drill-1.16.0.tar.gz
 
 ADD storage-plugins-override.conf /drill/conf/storage-plugins-override.conf
 
-ENTRYPOINT [ "/bin/bash /drill/bin/drill-embedded" ]
+ENTRYPOINT [ "/drill/bin/drill-embedded" ]
