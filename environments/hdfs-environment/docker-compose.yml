@@ -136,6 +136,15 @@ services:
       cscourse:
         ipv4_address: 172.25.0.10
 
+  drill:
+    image: vedsted/drill
+    container_name: drill
+    ports: 
+      - 8047:8047
+    networks: 
+      cscourse:
+        ipv4_address: 172.25.0.11
+
 networks:
   cscourse:
     name: hadoop
