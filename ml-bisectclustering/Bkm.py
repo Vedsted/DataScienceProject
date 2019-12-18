@@ -4,7 +4,7 @@ from pyspark.ml.clustering import BisectingKMeans
 from pyspark.ml.feature import VectorAssembler
 from pyspark.sql import functions as sf
 from pyspark.sql.functions import *
-from pyspark.sql.types import FloatType
+from pyspark.sql.types import DoubleType
 import sys
 import argparse
 
@@ -33,17 +33,17 @@ else:
 if args.outputFile:
     output = args.outputFile
 else:
-    output = "somepath.csv" #Set this to some HDFS PATH
+    output = "output/output.csv" #Set this to some HDFS PATH
 
+limitInput = false
 if args.n:
     observations = args.n
-else:
-    observations = 25
+    limitInput = true
 
 if args.m:
     minDivisSize = args.m
 else:
-    minDivisSize = 25
+    minDivisSize = 1.0
 
 
 log('Running BKM.py with following arguments:')
@@ -53,12 +53,6 @@ log("Output File: " + output)
 log("Number of Observations: " + str(observations))
 log("Minimum Divisible Cluster Size: " + str(minDivisSize))
 
-"""
-#BKM model variables
-minDivisSize = 1.0
-num_of_Clusters = 3
-observations = 25
-"""
 
 sc = SparkContext(appName='ClusteringAlgorithm').getOrCreate()
 ss = SparkSession(sc)
@@ -69,7 +63,11 @@ df = ss.read.option("header", "true").csv(data)
 
 #REmove null values in lat/long
 df_notnull = df.filter(sf.col("Latitude").isNotNull() & sf.col("Longitude").isNotNull())
-df_limit = df_notnull.limit(observations)
+
+if limitInput:
+    df_limit = df_notnull.limit(observations)
+else:
+    df_limit = df_notnull
 
 featureColumns = ["Latitude", "Longitude"]
 vectorAssembler = VectorAssembler(inputCols=featureColumns,
@@ -118,8 +116,8 @@ df_With_Predictions = model.transform(df_joined).drop("Features")
 #centers[clusterIndex][0] # Latitude
 #centers[clusterIndex][1] # Longitude
 df_With_Predictions.printSchema()
-centerLatUDF = udf(lambda pred: centers[pred][0], FloatType())
-centerLongUDF = udf(lambda pred: centers[pred][1], FloatType())
+centerLatUDF = udf(lambda pred: float(centers[pred][0]), DoubleType())
+centerLongUDF = udf(lambda pred: float(centers[pred][1]), DoubleType())
 df_With_Predictions = df_With_Predictions.withColumn("CenterLatitude", centerLatUDF("prediction"))
 df_With_Predictions = df_With_Predictions.withColumn("CenterLongitude", centerLongUDF("prediction"))
 df_With_Predictions.printSchema()
