@@ -1,0 +1,19 @@
+# Bisecting kmeans clustering
+This program contains an implementation of Bisecting kmeans clustering which is an extension to the original kmeans clustering algorithm. The main difference is that bisecting divides clusters that have the highest sum of squared distances (i.e. variance, heterogenity).
+
+## Prerequisites
+* Python3 (preferably 3.5.0+ and < 3.8.0)
+* PySpark (+ Spark which should be included when downloading PySpark)
+* pip install numpy
+
+## Running local mode
+The clustering algorithm can be run in spark local mode by typing the command:
+```
+./run-spark-local-example.sh
+```
+The parameters for the bisect clustering algorithm can be manipulated in the script.
+
+To see the help for the python program type:
+```
+python Bkm.py --help
+```
