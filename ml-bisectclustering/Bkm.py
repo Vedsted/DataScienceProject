@@ -13,7 +13,7 @@ import argparse
 Usage: --inputFile inputPath [--outputFile outputPath] [--k numberOfClusters] [--numberOfObservations n] [--minimumDivisibleClusterSize m (>=1.0)]
 """
 def log(text):
-    print(text, file=sys.stderr)
+    print(text)
 
 parser = argparse.ArgumentParser(description='BKM Cluster on input file')
 parser.add_argument('inputFile', metavar='inputPath', type=str, help='Path to input data')
@@ -35,10 +35,10 @@ if args.outputFile:
 else:
     output = "output/output.csv" #Set this to some HDFS PATH
 
-limitInput = false
+limitInput = False
 if args.n:
     observations = args.n
-    limitInput = true
+    limitInput = True
 
 if args.m:
     minDivisSize = args.m

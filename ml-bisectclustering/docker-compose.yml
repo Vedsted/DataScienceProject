@@ -1,0 +1,18 @@
+version: "3.5"
+
+services:
+  sparkjob:
+    image: vedsted/spark_executor
+    volumes:
+      - ./Bkm.py:/app/app.py
+      - ./submit-job.sh:/app/submit-job.sh
+    environment:
+      - BKM_IN=hdfs://namenode:9000/csvfiles/*.csv # The input file
+      - BKM_OUT=hdfs://namenode:9000/dataframes/clustering-testoutput.csv # The name of the output file
+      - BKM_M=1 # Least divisible cluster size
+      - BKM_N=20 # Number of observations to use in the provided input file
+      - BKM_K=5 # Number of clusters
+networks:
+  default:
+    external:
+      name: hadoop
