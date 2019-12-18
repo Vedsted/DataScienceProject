@@ -12,8 +12,8 @@ import argparse
 """
 Usage: --inputFile inputPath [--outputFile outputPath] [--k numberOfClusters] [--numberOfObservations n] [--minimumDivisibleClusterSize m (>=1.0)]
 """
-def log(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
+def log(text):
+    print(text, file=sys.stderr)
 
 parser = argparse.ArgumentParser(description='BKM Cluster on input file')
 parser.add_argument('inputFile', metavar='inputPath', type=str, help='Path to input data')
