@@ -4,6 +4,7 @@ from pyspark.ml.clustering import BisectingKMeans
 from pyspark.ml.feature import VectorAssembler
 from pyspark.sql import functions as sf
 from pyspark.sql.functions import *
+from pyspark.sql.types import FloatType
 import sys
 import argparse
 
@@ -21,6 +22,8 @@ parser.add_argument('--k', metavar='numberOfClusters', type=int, help='Number of
 parser.add_argument('--n', metavar='numberOfObservations', type=int, help='Number of rows from the input file to be used for clustering')
 parser.add_argument('--m', metavar='minimumDivisibleClusterSize', type=int, help='Minimum cluster size, should be greater than or equal to 1.0')
 args = parser.parse_args()
+
+data = args.inputFile
 
 if args.k:
     num_of_Clusters = args.k
@@ -44,11 +47,11 @@ else:
 
 
 log('Running BKM.py with following arguments:')
-log("Number of Clusters: ")
-log("Input File: ")
-log("Output File: ")
-log("Number of Observations: ")
-log("Minimum Divisible Cluster Size: ")
+log("Number of Clusters: " + str(num_of_Clusters))
+log("Input File: " + args.inputFile)
+log("Output File: " + output)
+log("Number of Observations: " + str(observations))
+log("Minimum Divisible Cluster Size: " + str(minDivisSize))
 
 """
 #BKM model variables
@@ -56,10 +59,6 @@ minDivisSize = 1.0
 num_of_Clusters = 3
 observations = 25
 """
-
-
-#data = args.inputFile
-data = "london-street.csv"
 
 sc = SparkContext(appName='ClusteringAlgorithm').getOrCreate()
 ss = SparkSession(sc)
@@ -72,7 +71,8 @@ df = ss.read.option("header", "true").csv(data)
 df_notnull = df.filter(sf.col("Latitude").isNotNull() & sf.col("Longitude").isNotNull())
 df_limit = df_notnull.limit(observations)
 
-vectorAssembler = VectorAssembler(inputCols=["Latitude", "Longitude"],
+featureColumns = ["Latitude", "Longitude"]
+vectorAssembler = VectorAssembler(inputCols=featureColumns,
                                   outputCol="Features")
 
 
@@ -88,7 +88,7 @@ df_trans = vectorAssembler.transform(df_vector)
 
 #Create id that can be used correlate each observation to its feature vector
 df_trans = df_trans.withColumn("id", monotonically_increasing_id())
-df_limit = df_limit.withColumn("id", monotonically_increasing_id()).drop()
+df_limit = df_limit.withColumn("id", monotonically_increasing_id()).drop("Latitude").drop("Longitude")
 
 #Drop one of the id columns after joining
 df_joined = df_limit.join(df_trans, "id", "inner").drop("id")
@@ -113,10 +113,20 @@ log(summary.clusterSizes)
 predictions = summary.cluster
 
 #Combine the predictions with the input dataFrame
-df_With_Predictions = model.transform(df_joined)
-df_With_Predictions.show(25)
+df_With_Predictions = model.transform(df_joined).drop("Features")
 
-df_With_Predictions.write.format("com.databricks.spark.csv").option("header", "true").save("test2.csv")
+#centers[clusterIndex][0] # Latitude
+#centers[clusterIndex][1] # Longitude
+df_With_Predictions.printSchema()
+centerLatUDF = udf(lambda pred: centers[pred][0], FloatType())
+centerLongUDF = udf(lambda pred: centers[pred][1], FloatType())
+df_With_Predictions = df_With_Predictions.withColumn("CenterLatitude", centerLatUDF("prediction"))
+df_With_Predictions = df_With_Predictions.withColumn("CenterLongitude", centerLongUDF("prediction"))
+df_With_Predictions.printSchema()
+
+df_With_Predictions.show(20) # Shows 20 observations as default
+
+df_With_Predictions.write.format("com.databricks.spark.csv").option("header", "true").save(output)
 
 cost = model.computeCost(df_joined) #Sum of square distnances - model error
 log("SSD = " + str(cost))
