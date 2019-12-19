@@ -141,6 +141,8 @@ services:
     container_name: drill
     ports: 
       - 8047:8047
+    volumes: 
+      - ./drill-env.sh:/drill/conf/drill-env.sh
     networks: 
       cscourse:
         ipv4_address: 172.25.0.11
