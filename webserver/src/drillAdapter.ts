@@ -15,7 +15,7 @@ export class DrillAdapter {
                     queryType: "SQL",
                     // query: "SELECT * FROM dfs.`dataframes/street.csv`",
                     query: sqlString,
-                    autoLimit: "10000"
+                    autoLimit: "1000000"
                 }
             })
             //

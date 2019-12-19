@@ -1,4 +1,4 @@
-import { RawQuerySpecification } from "./RawQuerySpecification";
+import { RawQuerySpecification } from "./rawQuerySpecification";
 
 export class SqlBuilder{
 
