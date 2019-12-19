@@ -1,0 +1,24 @@
+{
+  "name": "leafletclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "out/index.js",
+  "scripts": {
+    "build": "tsc && npx webpack --config webpack.config.js && rm -rf js",
+    "start": "npm run build && brave index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/leaflet": "^1.5.7",
+    "@types/leaflet.heat": "^0.2.0",
+    "leaflet": "^1.6.0",
+    "leaflet.heat": "^0.2.0",
+    "typescript": "^3.7.3",
+    "webpack": "^4.41.3"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.10"
+  }
+}
