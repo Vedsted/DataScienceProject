@@ -1,7 +1,5 @@
 FROM openjdk:8
 
-LABEL Name=pysparkExampleImage Version=0.0.1 
-
 # Updating package manager
 RUN apt update
 
