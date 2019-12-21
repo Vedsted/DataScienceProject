@@ -1,4 +1,4 @@
-from pyspark import SparkContext
+from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
 from pyspark.ml.clustering import BisectingKMeans
 from pyspark.ml.feature import VectorAssembler
@@ -50,15 +50,16 @@ log('Running BKM.py with following arguments:')
 log("Number of Clusters: " + str(num_of_Clusters))
 log("Input File: " + args.inputFile)
 log("Output File: " + output)
-log("Number of Observations: " + str(observations))
+log("Number of Observations: " + str(observations) if limitInput else str("all"))
 log("Minimum Divisible Cluster Size: " + str(minDivisSize))
-
 
 sc = SparkContext(appName='ClusteringAlgorithm').getOrCreate()
 ss = SparkSession(sc)
 
-df = ss.read.option("header", "true").csv(data)
 
+df = ss.read.option("header", "true").csv("testdata/crime-data/*/*.csv")
+print("Observations in input data: " + str(df.count()))
+#sys.exit()
 
 
 #REmove null values in lat/long
@@ -90,6 +91,7 @@ df_limit = df_limit.withColumn("id", monotonically_increasing_id()).drop("Latitu
 
 #Drop one of the id columns after joining
 df_joined = df_limit.join(df_trans, "id", "inner").drop("id")
+df_joined.cache()
 
 bkm = BisectingKMeans(k=num_of_Clusters, minDivisibleClusterSize=minDivisSize, featuresCol="Features")
 model = bkm.fit(df_joined)
