@@ -12,6 +12,7 @@ The `docker-compose` file contains the whole Hadoop environment including:
   * Nodemanager2
   * Nodemanager3
   * Historyserver for logging results from programs run on the YARN cluster
+* Drill
 * Network for communication
 * Volumes for containers
 
@@ -19,5 +20,5 @@ The `docker-compose` file contains the whole Hadoop environment including:
 Run the environment by issuing:
 
 ```
-docker-compose up
+docker-compose pull && docker-compose up
 ```
