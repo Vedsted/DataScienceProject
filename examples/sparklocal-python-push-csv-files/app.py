@@ -5,16 +5,11 @@ import os
 sc = SparkContext(master='local', appName='Upload CSV files', )
 ss = SparkSession(sc)
 
-dirPath = "/app/files/street"
-files = os.listdir(dirPath)
+dirpath = "/app/files/street/"
+files = os.listdir(dirpath)
 for file in files:
-    path = "file://" + dirPath + file
+    path = "file://" + dirpath + file
     sc.textFile(path).saveAsTextFile("hdfs://namenode:9000/csvfiles/street/" + file)
 
-dirPath = "/app/files/outcomes"
-files = os.listdir(dirPath)
-for file in files:
-    path = "file://" + dirPath + file
-    sc.textFile(path).saveAsTextFile("hdfs://namenode:9000/csvfiles/outcomes/" + file)
 
 sc.stop()
