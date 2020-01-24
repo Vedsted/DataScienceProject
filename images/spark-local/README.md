@@ -32,6 +32,44 @@ networks:
       name: hadoop
 ```
 
+## Providing arguments to spark jobs
+In some cases you may want to provide arguments to a spark job e.g arguments for spark-submit or a python program. This is possible by overriding the default submit-job.sh file in the `docker-compose.yml` file. Spark-submit arguments can be provided by overriding the `submit-job.sh` from the spark-base image. To override the `submit-job.sh` do the following:
+
+1. Create the `docker-compose.yml` file in a new folder as usual.
+1. Create a new `submit-job.sh` file (same directory as `docker-compose.yml`) with the specific arguments you need e.g.
+```
+#!/bin/bash
+# Submits the python script to the YARN cluster
+/spark/bin/spark-submit \
+    --master yarn \
+    --deploy-mode cluster \
+    /app/app.py $BKM_IN --outputFile $BKM_OUT --k $BKM_K --n $BKM_N --m $BKM_M
+```
+1. Make the `submit-job.sh` file executable
+```
+chmod +x submit-job.sh
+```
+1. Edit the content of the `docker-compose.yml` file to volume the new `submit-job.sh` and set the environment variables which will be passed to the python program. An example is shown below.
+```
+services:
+  sparkjob:
+    image: vedsted/spark_executor
+    volumes:
+      - ./Bkm.py:/app/app.py # Volume the python program
+      - ./submit-job.sh:/app/submit-job.sh # Volume the custom script
+    environment:
+      - BKM_IN=hdfs://namenode:9000/csvfiles/*.csv # The input file
+      - BKM_OUT=hdfs://namenode:9000/dataframes/clustering-testoutput.csv # The name of the output file
+      - BKM_M=1 # Least divisible cluster size
+      - BKM_N=20 # Number of observations to use in the provided input file
+      - BKM_K=5 # Number of clusters
+networks:
+  default:
+    external:
+      name: hadoop
+```
+1. Run `docker-compose up`.
+
 ## Build Image
 ```
 docker build --rm -t vedsted/spark_local .
