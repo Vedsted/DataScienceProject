@@ -21,7 +21,7 @@ export class SqlBuilder{
     }
 
     from(source : string){
-        this.query += "FROM dfs.`dataframes/" + source + ".csv` "
+        this.query += "FROM dfs.`csvfiles/" + source + ".csv` "
         return this; 
     }
 

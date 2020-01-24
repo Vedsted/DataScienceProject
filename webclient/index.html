@@ -6,22 +6,118 @@
     <style>
         .map {
             width: 100%;
-            height: 400px;
+            height: 1000px;
         }
+
+        .ol-popup {
+        position: absolute;
+        background-color: white;
+        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+        bottom: 12px;
+        left: -50px;
+        min-width: 280px;
+      }
+      .ol-popup:after, .ol-popup:before {
+        top: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+      .ol-popup:after {
+        border-top-color: white;
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+      }
+      .ol-popup:before {
+        border-top-color: #cccccc;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+      }
+      .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+      }
+      .ol-popup-closer:after {
+        content: "✖";
+      }
     </style>
 </head>
 
 <body>
     <h1>Crime Map</h1>
     <div id="map" class="map"></div>
-    <form>
-        <label>radius size</label>
-        <label id="radiusValue">10</label>
-        <input id="radius" type="range" min="1" max="50" step="1" value="10" />
-        <label>blur size</label>
-        <label id="blurValue">25</label>
-        <input id="blur" type="range" min="1" max="50" step="1" value="25" />
-    </form>
+
+    <div id="popup" class="ol-popup">
+        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+        <div id="popup-content"></div>
+      </div>
+    
+    <label>radius size</label>
+    <label id="radiusValue">10</label>
+    <input id="radius" type="range" min="1" max="50" step="1" value="10" />
+    <label>blur size</label>
+    <label id="blurValue">25</label>
+    <input id="blur" type="range" min="1" max="50" step="1" value="25" />
+    <select id="dataset">
+        <option value="/raw/2019-01">Raw 2019-01</option>
+        <option value="/raw/london/2019-01">Raw London 2019-01</option>
+        <option value="/cluster/out-2019-01-k-100000-m-3">Cluster 2019-01 k-100000 m-3</option>
+        <option value="/cluster/london/out-2019-01-k-100000-m-3">Cluster London 2019-01 k-100000 m-3</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-01-k-50000-m-3">Cluster Metropolitan + London City 2018-01 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-01-k-30000-m-3">Cluster Metropolitan + London City 2018-01 k-30000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-01-k-15000-m-3">Cluster Metropolitan + London City 2018-01 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-01-k-5000-m-3">Cluster Metropolitan + London City 2018-01 k-5000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-02-k-50000-m-3">Cluster Metropolitan + London City 2018-02 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-02-k-15000-m-3">Cluster Metropolitan + London City 2018-02 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-03-k-50000-m-3">Cluster Metropolitan + London City 2018-03 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-03-k-15000-m-3">Cluster Metropolitan + London City 2018-03 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-04-k-50000-m-3">Cluster Metropolitan + London City 2018-04 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-04-k-15000-m-3">Cluster Metropolitan + London City 2018-04 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-05-k-50000-m-3">Cluster Metropolitan + London City 2018-05 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-05-k-15000-m-3">Cluster Metropolitan + London City 2018-05 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-06-k-50000-m-3">Cluster Metropolitan + London City 2018-06 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-06-k-15000-m-3">Cluster Metropolitan + London City 2018-06 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-07-k-50000-m-3">Cluster Metropolitan + London City 2018-07 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-07-k-15000-m-3">Cluster Metropolitan + London City 2018-07 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-08-k-50000-m-3">Cluster Metropolitan + London City 2018-08 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-08-k-15000-m-3">Cluster Metropolitan + London City 2018-08 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-09-k-50000-m-3">Cluster Metropolitan + London City 2018-09 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-09-k-15000-m-3">Cluster Metropolitan + London City 2018-09 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-10-k-50000-m-3">Cluster Metropolitan + London City 2018-10 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-10-k-15000-m-3">Cluster Metropolitan + London City 2018-10 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-11-k-50000-m-3">Cluster Metropolitan + London City 2018-11 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-11-k-15000-m-3">Cluster Metropolitan + London City 2018-11 k-15000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-12-k-50000-m-3">Cluster Metropolitan + London City 2018-12 k-50000</option>
+        <option value="/cluster/metropolitan-london-city/out-2018-12-k-15000-m-3">Cluster Metropolitan + London City 2018-12 k-15000</option>
+        <option value="/raw/2018/01/metropolitan-london-city">Raw Metropolitan + London City 2018-01</option>
+        <option value="/raw/2018/02/metropolitan-london-city">Raw Metropolitan + London City 2018-02</option>
+        <option value="/raw/2018/03/metropolitan-london-city">Raw Metropolitan + London City 2018-03</option>
+        <option value="/raw/2018/04/metropolitan-london-city">Raw Metropolitan + London City 2018-04</option>
+        <option value="/raw/2018/05/metropolitan-london-city">Raw Metropolitan + London City 2018-05</option>
+        <option value="/raw/2018/06/metropolitan-london-city">Raw Metropolitan + London City 2018-06</option>
+        <option value="/raw/2018/07/metropolitan-london-city">Raw Metropolitan + London City 2018-07</option>
+        <option value="/raw/2018/08/metropolitan-london-city">Raw Metropolitan + London City 2018-08</option>
+        <option value="/raw/2018/09/metropolitan-london-city">Raw Metropolitan + London City 2018-09</option>
+        <option value="/raw/2018/10/metropolitan-london-city">Raw Metropolitan + London City 2018-10</option>
+        <option value="/raw/2018/11/metropolitan-london-city">Raw Metropolitan + London City 2018-11</option>
+        <option value="/raw/2018/12/metropolitan-london-city">Raw Metropolitan + London City 2018-12</option>
+        <option value="/cluster/out-2019-01-k-50000-m-3">Cluster 2019-01 k-50000 m-3</option>
+        <option value="/cluster/out-2019-01-k-10000-m-3">Cluster 2019-01 k-10000 m-3</option>
+        <option value="/cluster/out-2019-01-k-5000-m-3">Cluster 2019-01 k-5000 m-3</option>
+    </select>
+    <button id="updateMap">Update map</button>
+    
     <!--<script src="js/index.js"></script>-->
     <script src="typescript/index.ts"></script>
 </body>
