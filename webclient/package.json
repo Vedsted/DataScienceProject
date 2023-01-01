@@ -17,7 +17,7 @@
     },
     "devDependencies": {
         "@types/ol": "^5.3.6",
-        "parcel": "1.11.0",
+        "parcel": "2.8.2",
         "typescript": "^3.7.3"
     }
 }
